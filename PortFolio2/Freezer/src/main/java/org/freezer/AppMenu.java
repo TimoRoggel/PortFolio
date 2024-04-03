@@ -30,6 +30,11 @@ public class AppMenu {
                     System.out.println("Sluiten...");
                     scanner.close();
                     return;
+                case 5:
+                    System.out.println("Uw email:");
+                    String emailAddress = scanner.nextLine();
+                    manager.sendProductListByEmail(emailAddress);
+                    break;
                 default:
                     System.out.println("Verkeerde keuze. Probeer opnieuw");
                     break;
@@ -43,6 +48,7 @@ public class AppMenu {
         System.out.println("2. Verwijderen Product");
         System.out.println("3. Product Lijst");
         System.out.println("4. Sluiten");
+        System.out.println("5. Stuur lijst via email");
         System.out.print("Kies een optie: ");
     }
 }
