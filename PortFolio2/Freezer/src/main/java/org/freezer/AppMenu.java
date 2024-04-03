@@ -48,7 +48,9 @@ public class AppMenu {
         System.out.println("2. Verwijderen Product");
         System.out.println("3. Product Lijst");
         System.out.println("4. Sluiten");
+        System.out.println("-----------------------");
         System.out.println("5. Stuur lijst via email");
+        System.out.println();
         System.out.print("Kies een optie: ");
     }
 }
