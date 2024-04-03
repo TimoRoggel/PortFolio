@@ -216,7 +216,7 @@ public class Manager {
     }
 
     public void sendProductListByEmail(String recipientEmail) {
-        File productListFile = new File(filePath); // Assuming filePath is the path to your producten.txt
+        File productListFile = new File(filePath);
         if (!productListFile.exists()) {
             System.out.println("Productenlijst bestand bestaat niet.");
             return;
@@ -224,7 +224,12 @@ public class Manager {
 
         Email emailSender = new Email();
         String subject = "Productenlijst";
-        String body = "Hierbij de productenlijst als bijlage.";
+        String body = "Hierbij de productenlijst als bijlage.\n" +
+                "\n" +
+                ":D\n" +
+                "\n" +
+                "Met vriendelijke groet,\n" +
+                "Team Freezer";
 
         emailSender.sendEmailWithAttachment(recipientEmail, subject, body, productListFile);
         System.out.println("E-mail is verzonden naar " + recipientEmail);

@@ -15,8 +15,8 @@ import java.io.File;
 import java.util.Properties;
 
 public class Email {
-    private final String username = "service.freezerapp@gmail.com"; // Replace with your Gmail address
-    private final String appPassword = "jtcf jefi wjwp chhk"; // Replace with your 16-digit App Password
+    private final String username = "service.freezerapp@gmail.com";
+    private final String appPassword = "jtcf jefi wjwp chhk";
 
     public void sendEmailWithAttachment(String recipientEmail, String subject, String body, File attachment) {
         Properties props = new Properties();
@@ -28,7 +28,7 @@ public class Email {
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, appPassword); // Use your App Password here
+                return new PasswordAuthentication(username, appPassword);
             }
         });
 
