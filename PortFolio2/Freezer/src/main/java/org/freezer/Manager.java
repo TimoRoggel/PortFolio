@@ -226,7 +226,16 @@ public class Manager {
         String subject = "Productenlijst";
         String body = "Hierbij de productenlijst als bijlage.\n" +
                 "\n" +
-                ":D\n" +
+                "|￣￣￣￣￣￣￣￣￣￣￣|\n" +
+                "                 Thanks for\n" +
+                "                  using\n" +
+                "                  Freezer!\n" +
+                "|＿＿＿＿＿＿＿＿＿＿＿| \n" +
+                "                \\ (•◡•) / \n" +
+                "                  \\      / \n" +
+                "                    ---\n" +
+                "                    |   |\n" +
+                "\n" +
                 "\n" +
                 "Met vriendelijke groet,\n" +
                 "Team Freezer";
