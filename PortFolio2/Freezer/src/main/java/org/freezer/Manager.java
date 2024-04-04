@@ -90,10 +90,10 @@ public class Manager {
     In deze methode wordt de lijst weergegeven met ID, Naam, Datum.
      */
     public void displayProductList() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Define the European style date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         System.out.println("Product Lijst:");
         for (Product product : products) {
-            String formattedDate = product.overdatum.format(formatter); // Format the LocalDate to a String in the desired format
+            String formattedDate = product.overdatum.format(formatter);
             System.out.println("ID: " + product.getId() + ", Naam: " + product.naam + ", Datum: " + formattedDate);
         }
     }
@@ -105,10 +105,9 @@ public class Manager {
      */
     public void addProduct(Product product) {
         if (!availableIDs.isEmpty()) {
-            int reusedId = availableIDs.pollFirst(); // Use and remove an available ID
+            int reusedId = availableIDs.pollFirst();
             product.setId(reusedId);
         } else {
-            // Generate a new ID, ensuring it's unique by starting from the highest current ID + 1
             int newId = products.isEmpty() ? 1 : products.stream().max(Comparator.comparingInt(Product::getId)).
                     get().getId() + 1;
             product.setId(newId);
@@ -123,7 +122,7 @@ public class Manager {
         products.removeIf(product -> {
             boolean toRemove = product.getId() == productId;
             if (toRemove) {
-                availableIDs.add(productId); // Add the ID back to available IDs
+                availableIDs.add(productId);
             }
             return toRemove;
         });
@@ -146,7 +145,7 @@ public class Manager {
     private void loadProductsFromFile() {
         File file = new File(filePath);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        int highestId = 0; // To keep track of the highest ID encountered
+        int highestId = 0;
 
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
@@ -172,12 +171,11 @@ public class Manager {
             System.err.println("File not found: " + e.getMessage());
         }
 
-        // Populate availableIDs with gaps in the sequence up to highestId
         for (int i = 1; i <= highestId; i++) {
             final int id = i;
             boolean idUsed = products.stream().anyMatch(p -> p.getId() == id);
             if (!idUsed) {
-                availableIDs.add(id); // Add ID to availableIDs if it's not used
+                availableIDs.add(id);
             }
         }
     }
