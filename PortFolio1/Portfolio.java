@@ -1,26 +1,24 @@
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 class Oefening {
+    String naam;
+    String spiergroep;
+    int aantalSets;
+    int rusttijd;
+    int aantalHerhalingen;
 
-    private String naam;
-    private String spiergroep;
-    private int aantalSets;
-    private int aantalHerhalingen;
-    private int rusttijd;
-
-    public Oefening(String naam, String spiergroep, int aantalSets, int aantalHerhalingen, int rusttijd){
+    public Oefening(String naam, String spiergroep, int aantalSets, int rusttijd, int aantalHerhalingen) {
         this.naam = naam;
         this.spiergroep = spiergroep;
         this.aantalSets = aantalSets;
-        this.aantalHerhalingen = aantalHerhalingen;
         this.rusttijd = rusttijd;
+        this.aantalHerhalingen = aantalHerhalingen;
     }
 
-    public void toonGegevens () {
-        System.out.printf ("Oefening voor %s: herhaal %d keer " +
-                        "(rust tussendoor %d seconden) %d %s%n",
+    public void toonGegevens() {
+        System.out.printf("Oefening voor %s: herhaal %d keer (rust tussendoor %d seconden) %d %s%n",
                 spiergroep, aantalSets, rusttijd, aantalHerhalingen, naam);
     }
 
@@ -30,69 +28,74 @@ class Oefening {
 }
 
 class Trainingsschema {
-    private String klant;
-    private String trainer;
-    private List<Oefening> oefeningen;
+    String klantNaam;
+    String trainer;
+    List<Oefening> oefeningen;
 
-    public Trainingsschema(String klant){
-        this.klant = klant;
-        this.trainer = null;
+    public Trainingsschema(String klantNaam){
+        this.klantNaam = klantNaam;
         this.oefeningen = new ArrayList<>();
     }
 
-    public Trainingsschema(String klant, String trainer){
-        this(klant);
+    public Trainingsschema(String klantNaam, String trainer) {
+        this.klantNaam = klantNaam;
         this.trainer = trainer;
+        this.oefeningen = new ArrayList<>();
     }
 
-    public void voegOefeningToe(Oefening oefening){
-        this.oefeningen.add(oefening);
+    public void voegOefeningToe(Oefening oefening) {
+        oefeningen.add(oefening);
     }
 
     public boolean isSchemaVoor(String klant){
-        return this.klant.equals(klant);
+        return klantNaam.equals(klant);
     }
 
     private void toonTrainer(){
-        if(trainer != null){
-            System.out.println("Uw trainer: " + trainer);
+        if(this.trainer == null){
+            System.out.println("geen trainer");
+        } else {
+            System.out.println(this.trainer);
         }
     }
 
     public void toonGegevens(){
-        toonTrainer();
-        for(Oefening oefening : oefeningen){
-            oefening.toonGegevens();
+        if(this.trainer != null){
+            System.out.println(this.trainer);
+            for(Oefening oefening : oefeningen){
+                System.out.printf("Oefening voor %s: Herhaal %d keer (rust door %d seconden) %d %s", oefening.spiergroep, oefening.aantalSets, oefening.rusttijd, oefening.aantalHerhalingen, oefening.naam);
+            }
+        } else {
+            System.out.println("U komt niet in ons systeem voor");
         }
     }
 }
 
 public class Main {
-
-    public static void main (String [] args) {
-
-
-        System.out.println ("Wat is uw naam? ");
-
-        // Schrijf hieronder verder aan het hoofdprogramma in de methode 'main'.
+    public static void main(String[] args) {
+        System.out.println("Wat is uw naam? ");
         Scanner scanner = new Scanner(System.in);
         String naam = scanner.nextLine();
 
-        Trainingsschema schemaArnold = new Trainingsschema("Arnold Schwarzenegger");
-        schemaArnold.voegOefeningToe(new Oefening("Push-ups", "Armen", 3, 3, 30));
-        schemaArnold.voegOefeningToe(new Oefening("Sit-ups", "Buik", 3, 4, 30));
-        schemaArnold.voegOefeningToe(new Oefening("Squats", "Benen", 2, 5, 30));
-        schemaArnold.voegOefeningToe(new Oefening("Supermans", "Rug", 3, 3, 15));
-        schemaArnold.voegOefeningToe(new Oefening("Chest-dips", "Borst", 3, 3, 30));
+        if ("Arnold Schwarzenegger".equalsIgnoreCase(naam)) {
+            Oefening pushUps = new Oefening("Push-ups", "Armen", 3, 30, 3);
+            Oefening sitUps = new Oefening("Sit-ups", "Buik", 3, 30, 4);
+            Oefening squats = new Oefening("Squats", "Benen", 2, 30, 5);
+            Oefening supermans = new Oefening("Supermans", "Rug", 3, 15, 3);
+            Oefening chestDips = new Oefening("Chest-dips", "Borst", 3, 30, 3);
 
-        Trainingsschema schemaKim = new Trainingsschema("Kim Kardashian", "Daphne Jongejans");
-        schemaKim.voegOefeningToe(new Oefening("Supermans", "Rug", 3, 3, 15));
-        schemaKim.voegOefeningToe(new Oefening("Sit-ups", "Buik", 3, 4, 30));
+            pushUps.toonGegevens();
+            sitUps.toonGegevens();
+            squats.toonGegevens();
+            supermans.toonGegevens();
+            chestDips.toonGegevens();
+        } else if ("Kim Kardashian".equalsIgnoreCase(naam)) {
+            System.out.println("Uw trainer: Daphne Jongejans");
+            Oefening supermans = new Oefening("Supermans", "Rug", 3, 15, 3);
+            Oefening sitUps = new Oefening("Sit-ups", "Buik", 3, 30, 4);
 
-        if (schemaArnold.isSchemaVoor(naam)) {
-            schemaArnold.toonGegevens();
-        } else if (schemaKim.isSchemaVoor(naam)) {
-            schemaKim.toonGegevens();
+            supermans.toonGegevens();
+            sitUps.toonGegevens();
         } else {
             System.out.println("U komt niet voor in ons systeem.");
         }
