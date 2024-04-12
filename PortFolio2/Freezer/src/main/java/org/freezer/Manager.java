@@ -14,16 +14,18 @@ public class Manager {
     private final TreeSet<Integer> availableIDs = new TreeSet<>();
     private final String filePath = "/Users/timobrouwer/Documents/HHS/Github/PortFolio/PortFolio2/Freezer" +
             "/src/main/java/org/freezer/producten.txt";
+    private final StickerPrinter printer;
 
     public Manager() {
         this.products = new ArrayList<>();
+        this.printer = new StickerPrinter();
         loadProductsFromFile();
     }
 
     /*
-    Deze methode voegt een product toe aan een lijst met de; Naam en Datum. Hiierbij wordt ook automatisch
+    Deze methode voegt een product toe aan een lijst met de; Naam en Datum. Hierbij wordt ook automatisch
     een ID gekoppeld zodat er dubbele producten in kunnen staan.
-    Hierbij wordt ook een QRcode genereert.
+    Hierbij wordt ook een QRcode genereert en automatisch afgedrukt.
      */
     public void addAndGenerateProduct(Scanner scanner) {
         System.out.println("Naam product:");
@@ -55,8 +57,8 @@ public class Manager {
                 + newProduct.getId() + "_" + productName.replaceAll("\\s+", "_") + ".jpg";
         QRcode.generateQRCode(qrData, qrPath);
 
-        // Nieuw: Afdrukken van de QR-code
-
+        // Print the QR code
+        printer.printQRCode(qrPath);
     }
 
     /*
@@ -168,7 +170,7 @@ public class Manager {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + e.getMessage());
+            System.err.println(" " + e.getMessage());
         }
 
         for (int i = 1; i <= highestId; i++) {
@@ -241,6 +243,4 @@ public class Manager {
         emailSender.sendEmailWithAttachment(recipientEmail, subject, body, productListFile);
         System.out.println("E-mail is verzonden naar " + recipientEmail);
     }
-
-
 }
