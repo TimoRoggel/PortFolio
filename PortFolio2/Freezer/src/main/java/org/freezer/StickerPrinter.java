@@ -10,43 +10,43 @@ import java.io.*;
 
 public class StickerPrinter {
 
-    // Method to print the QR code
+    // Methode om de QR-code af te drukken
     public void printQRCode(String qrImagePath) {
         try {
-            // Resize the image to fit within the printable area
+            // Formaat van de afbeelding aanpassen om binnen het afdrukgebied te passen
             File inputFile = new File(qrImagePath);
-            BufferedImage resizedImage = resizeImage(inputFile, 80, 80); // Resize to 80x80 pixels
+            BufferedImage resizedImage = resizeImage(inputFile, 80, 80); // Formaat wijzigen naar 80x80 pixels
 
-            // Convert BufferedImage to byte array
+            // BufferedImage converteren naar een byte-array
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(resizedImage, "PNG", baos);
             byte[] imageData = baos.toByteArray();
 
-            // Get the default print service
+            // De standaard afdrukservice verkrijgen
             PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
 
-            // Create a Doc from the image data
+            // Een Doc maken van de afbeeldingsgegevens
             DocFlavor flavor = DocFlavor.BYTE_ARRAY.PNG;
             Doc doc = new SimpleDoc(imageData, flavor, null);
 
-            // Create a print job
+            // Een afdruktaak maken
             DocPrintJob printJob = printService.createPrintJob();
 
-            // Adjust the margins and position as needed
+            // De marges en positie aanpassen indien nodig
             PrintRequestAttributeSet printAttributes = new HashPrintRequestAttributeSet();
-            printAttributes.add(new MediaPrintableArea(10, 10, 120 / 2.83f, 120 / 2.83f, MediaPrintableArea.MM)); // Converted from pixels to mm
+            printAttributes.add(new MediaPrintableArea(10, 10, 120 / 2.83f, 120 / 2.83f, MediaPrintableArea.MM)); // Geconverteerd van pixels naar mm
             printAttributes.add(MediaSizeName.ISO_A4);
 
-            // Print the document
+            // Het document afdrukken
             printJob.print(doc, printAttributes);
 
-            System.out.println("QR code printed successfully.");
+            System.out.println("QR-code succesvol afgedrukt.");
         } catch (IOException | PrintException e) {
-            System.err.println("Failed to print QR code: " + e.getMessage());
+            System.err.println("Het afdrukken van de QR-code is mislukt: " + e.getMessage());
         }
     }
 
-    // Method to resize the image
+    // Methode om de afbeelding te vergroten
     public BufferedImage resizeImage(File inputFile, int width, int height) throws IOException {
         BufferedImage originalImage = ImageIO.read(inputFile);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

@@ -9,35 +9,36 @@ import java.util.Comparator;
 import java.util.Scanner;
 import java.util.TreeSet;
 
-public class Manager {
-    private final ArrayList<Product> products;
-    private final TreeSet<Integer> availableIDs = new TreeSet<>();
+public class Manager implements ProductManager{
+    private final ArrayList<Product> products; // Lijst van producten
+    private final TreeSet<Integer> availableIDs = new TreeSet<>(); // Beschikbare ID's voor hergebruik
     private final String filePath = "/Users/timobrouwer/Documents/HHS/Github/PortFolio/PortFolio2/Freezer" +
-            "/src/main/java/org/freezer/producten.txt";
-    private final StickerPrinter printer;
+            "/src/main/java/org/freezer/producten.txt"; // Pad naar het productenbestand
+    private final StickerPrinter printer; // Stickerprinter-object
 
     public Manager() {
-        this.products = new ArrayList<>();
-        this.printer = new StickerPrinter();
-        loadProductsFromFile();
+        this.products = new ArrayList<>(); // Initialiseren van de lijst met producten
+        this.printer = new StickerPrinter(); // Initialiseren van de stickerprinter
+        loadProductsFromFile(); // Laden van producten uit het bestand
     }
 
     /*
     Deze methode voegt een product toe aan een lijst met de; Naam en Datum. Hierbij wordt ook automatisch
-    een ID gekoppeld zodat er dubbele producten in kunnen staan.
-    Hierbij wordt ook een QRcode genereert en automatisch afgedrukt.
+    een ID gekoppeld zodat er geen dubbele producten in kunnen staan.
+    Hierbij wordt ook een QR-code gegenereerd en automatisch afgedrukt.
      */
+    @Override
     public void addAndGenerateProduct(Scanner scanner) {
         System.out.println("Naam product:");
         String productName = scanner.nextLine();
 
-
-        String expirationDateStr = null;
+        // Datum invoeren en controleren
+        String expirationDateStr = null; // Controleert of de vervaldatum van het product geldig is door de gebruikersinvoer te parsen.
+                                        // Parse veranderd de datatype in dit geval naar een Localdate object
         LocalDate expirationDate = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
         while(expirationDate == null){
-            System.out.println("Datum (bijv. 01-01-2024)");
+            System.out.println("Datum (bijv. 01-01-2024):");
             expirationDateStr = scanner.nextLine();
 
             try{
@@ -47,23 +48,26 @@ public class Manager {
             }
         }
 
+        // Nieuw product maken en toevoegen aan de lijst
         Product newProduct = new Product(productName, expirationDate);
         addProduct(newProduct);
         System.out.println("Product toegevoegd!");
 
+        // QR-code genereren en afdrukken
         String qrData = "Product ID: " + newProduct.getId() + ", Naam: " + productName +
                 ", Vervaldatum: " + formatter.format(expirationDate);
         String qrPath = "/Users/timobrouwer/Documents/HHS/Semester 2/Project OPT1/QRcode/"
                 + newProduct.getId() + "_" + productName.replaceAll("\\s+", "_") + ".jpg";
         QRcode.generateQRCode(qrData, qrPath);
 
-        // Print the QR code
+        // QR-code afdrukken
         printer.printQRCode(qrPath);
     }
 
     /*
     In deze methode wordt een product verwijderd uit de lijst inclusief de QRcode.
      */
+    @Override
     public void removeProductAndQrCode(Scanner scanner) {
         System.out.println("ID van het product die u wilt verwijderen:");
         int productIdToRemove = scanner.nextInt();
@@ -78,6 +82,7 @@ public class Manager {
         deleteProduct(productIdToRemove);
         System.out.println("Product met ID '" + productIdToRemove + "' verwijderd!");
 
+        //
         String qrPath = "/Users/timobrouwer/Documents/HHS/Semester 2/Project OPT1/QRcode/"
                 + productIdToRemove + "_" + productToRemove.naam.replaceAll("\\s+", "_") + ".jpg";
         File qrFile = new File(qrPath);
@@ -91,6 +96,7 @@ public class Manager {
     /*
     In deze methode wordt de lijst weergegeven met ID, Naam, Datum.
      */
+    @Override
     public void displayProductList() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         System.out.println("Product Lijst:");
