@@ -33,8 +33,9 @@ public class Manager implements ProductManager{
         String productName = scanner.nextLine();
 
         // Datum invoeren en controleren
-        String expirationDateStr = null; // Controleert of de vervaldatum van het product geldig is door de gebruikersinvoer te parsen.
-                                        // Parse veranderd de datatype in dit geval naar een Localdate object
+        String expirationDateStr = null;
+        // Controleert of de vervaldatum van het product geldig is door de gebruikersinvoer te parsen.
+        // Parse veranderd de datatype in dit geval naar een Localdate object
         LocalDate expirationDate = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         while(expirationDate == null){
@@ -73,16 +74,18 @@ public class Manager implements ProductManager{
         int productIdToRemove = scanner.nextInt();
         scanner.nextLine();
 
+        // checkt of product met ID wel bestaat
         Product productToRemove = getProductById(productIdToRemove);
         if (productToRemove == null) {
             System.out.println("Product niet gevonden!");
             return;
         }
 
+        // verwijderd product door middel van ID
         deleteProduct(productIdToRemove);
         System.out.println("Product met ID '" + productIdToRemove + "' verwijderd!");
 
-        //
+        //verwijderd de QR code uit de map
         String qrPath = "/Users/timobrouwer/Documents/HHS/Semester 2/Project OPT1/QRcode/"
                 + productIdToRemove + "_" + productToRemove.naam.replaceAll("\\s+", "_") + ".jpg";
         File qrFile = new File(qrPath);
@@ -108,9 +111,11 @@ public class Manager implements ProductManager{
 
 
 
-    /*
-    Volgende 3 methodes spreken voor zich.
-     */
+    // Voegt een nieuw product toe aan de lijst van producten.
+    // Als er herbruikbare ID's beschikbaar zijn, wordt de eerste beschikbare ID gebruikt.
+    // Anders wordt een nieuwe ID toegewezen op basis van het hoogste ID in de huidige lijst, plus één.
+    // Na het toewijzen van een ID wordt het product toegevoegd aan de lijst van producten en wordt het opgeslagen naar een bestand.
+
     public void addProduct(Product product) {
         if (!availableIDs.isEmpty()) {
             int reusedId = availableIDs.pollFirst();
@@ -125,7 +130,9 @@ public class Manager implements ProductManager{
         saveProductToFile(product);
     }
 
-
+    // Verwijdert een product uit de lijst van producten op basis van de opgegeven product-ID.
+    // Als het product wordt verwijderd, wordt de bijbehorende ID toegevoegd aan de lijst van beschikbare ID's.
+    // Nadat het product is verwijderd, wordt het bijgewerkte productbestand opgeslagen.
     public void deleteProduct(int productId) {
         products.removeIf(product -> {
             boolean toRemove = product.getId() == productId;
@@ -137,7 +144,8 @@ public class Manager implements ProductManager{
         updateProductFile();
     }
 
-
+    // Zoekt en retourneert een product uit de lijst van producten op basis van de opgegeven ID.
+    // Als er geen overeenkomst wordt gevonden, wordt null geretourneerd.
     public Product getProductById(int id) {
         for (Product product : this.products) {
             if (product.getId() == id) {
@@ -147,9 +155,10 @@ public class Manager implements ProductManager{
         return null;
     }
 
-    /*
-    Volgende 3 methodes zorgen zodat de txt files wordt bijgewerkt op basis van de functies die worden gebruikt.
-     */
+    // Laadt productgegevens uit het opgegeven bestandspad.
+    // Verwacht een CSV-bestandsindeling met drie kolommen: ID, naam en vervaldatum.
+    // Als het bestand niet kan worden gevonden, wordt een foutbericht weergegeven.
+    // Na het laden van de producten, worden eventuele niet-gebruikte ID's toegevoegd aan de lijst van beschikbare ID's.
     private void loadProductsFromFile() {
         File file = new File(filePath);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -189,7 +198,10 @@ public class Manager implements ProductManager{
     }
 
 
-
+    // Slaat de gegevens van het opgegeven product op naar het bestand.
+    // Gebruikt het opgegeven bestandspad en formatteert de vervaldatum volgens het patroon "dd-MM-yyyy".
+    // Voegt de productdetails toe aan het bestand in een CSV-indeling met kolommen voor ID, naam en vervaldatum.
+    // Als er een fout optreedt tijdens het schrijven naar het bestand, wordt een foutbericht weergegeven.
     private void saveProductToFile(Product product) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -205,7 +217,10 @@ public class Manager implements ProductManager{
     }
 
 
-
+    // Werkt het productbestand bij met de gegevens van de huidige productenlijst.
+    // Gebruikt het opgegeven bestandspad en formatteert de vervaldatums volgens het patroon "dd-MM-yyyy".
+    // Overschrijft het bestand met de bijgewerkte productdetails in een CSV-indeling met kolommen voor ID, naam en vervaldatum.
+    // Als er een fout optreedt tijdens het schrijven naar het bestand, wordt een foutbericht weergegeven.
     private void updateProductFile() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -221,6 +236,12 @@ public class Manager implements ProductManager{
         }
     }
 
+    // Verzendt de lijst van producten per e-mail naar de opgegeven ontvanger.
+    // Controleert eerst of het bestand met de productenlijst bestaat.
+    // Stelt het onderwerp en de inhoud van de e-mail in.
+    // Maakt gebruik van de Email klasse om de e-mail met bijlage te versturen.
+    // Geeft een melding weer nadat de e-mail is verzonden.
+    @Override
     public void sendProductListByEmail(String recipientEmail) {
         File productListFile = new File(filePath);
         if (!productListFile.exists()) {

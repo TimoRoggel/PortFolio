@@ -11,6 +11,16 @@ import java.io.*;
 public class StickerPrinter {
 
     // Methode om de QR-code af te drukken
+    /*
+    Deze methode drukt de QR-code af op een sticker.
+
+    Parameters:
+        - qrImagePath: Het pad naar de afbeelding van de QR-code.
+
+    Throws:
+        - IOException: Als er een fout optreedt tijdens het lezen van de afbeelding.
+        - PrintException: Als er een fout optreedt tijdens het afdrukken van de QR-code.
+     */
     public void printQRCode(String qrImagePath) {
         try {
             // Formaat van de afbeelding aanpassen om binnen het afdrukgebied te passen
@@ -47,6 +57,20 @@ public class StickerPrinter {
     }
 
     // Methode om de afbeelding te vergroten
+    /*
+    Deze methode vergroot de opgegeven afbeelding naar de gewenste grootte.
+
+    Parameters:
+        - inputFile: Het bestand dat de originele afbeelding bevat.
+        - width: De breedte van de vergrote afbeelding.
+        - height: De hoogte van de vergrote afbeelding.
+
+    Returns:
+        - BufferedImage: De vergrote afbeelding.
+
+    Throws:
+        - IOException: Als er een fout optreedt tijdens het lezen van de afbeelding.
+     */
     public BufferedImage resizeImage(File inputFile, int width, int height) throws IOException {
         BufferedImage originalImage = ImageIO.read(inputFile);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

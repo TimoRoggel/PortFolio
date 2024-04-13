@@ -12,7 +12,15 @@ import java.nio.file.Paths;
 public class QRcode {
 
     /*
-    Deze methode zorgt ervoor dat er een QRcode wordt aangemaakt doormiddel van de zxing libary.
+    Deze methode genereert een QR-code met behulp van de zxing-bibliotheek.
+
+    Parameters:
+        - data: De gegevens die in de QR-code moeten worden opgenomen.
+        - path: Het pad waar de QR-code moet worden opgeslagen.
+
+    Throws:
+        - WriterException: Als er een fout optreedt tijdens het schrijven van de QR-code.
+        - IOException: Als er een fout optreedt tijdens het schrijven van de QR-code naar het bestand.
      */
     public static void generateQRCode(String data, String path) {
         try {
