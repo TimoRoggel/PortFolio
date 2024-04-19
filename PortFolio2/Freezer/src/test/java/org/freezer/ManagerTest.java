@@ -42,19 +42,17 @@ class ManagerTest {
     }
     @Test
     void displayProductList() {
-        // Simulate adding products
+
         manager.addProduct(new Product("Test Product 1", LocalDate.of(2025, 12, 31)));
         manager.addProduct(new Product("Test Product 2", LocalDate.of(2025, 12, 31)));
         manager.addProduct(new Product("Test Product 3", LocalDate.of(2025, 12, 31)));
 
-        // Redirect System.out for testing
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        // Call the method under test
         manager.displayProductList();
 
-        // Assert against the expected output
+
         String expectedOutput = "Product Lijst:\n" +
                 "ID: 1, Naam: Test Product 1, Datum: 31-12-2025\n" +
                 "ID: 2, Naam: Test Product 2, Datum: 31-12-2025\n" +
