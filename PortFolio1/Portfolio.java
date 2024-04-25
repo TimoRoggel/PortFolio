@@ -48,54 +48,51 @@ class Trainingsschema {
     }
 
     public boolean isSchemaVoor(String klant){
-        return klantNaam.equals(klant);
+        return klantNaam.equalsIgnoreCase(klant);
     }
 
-    private void toonTrainer(){
-        if(this.trainer == null){
-            System.out.println("geen trainer");
-        } else {
-            System.out.println(this.trainer);
+    public void toonGegevens() {
+        if (this.trainer != null) {
+            System.out.println("Uw trainer: " + this.trainer);
+        }
+        for (Oefening oefening : oefeningen) {
+            oefening.toonGegevens();
         }
     }
 
-    public void toonGegevens(){
-        if(this.trainer != null){
-            System.out.println(this.trainer);
-            for(Oefening oefening : oefeningen){
-                System.out.printf("Oefening voor %s: Herhaal %d keer (rust door %d seconden) %d %s", oefening.spiergroep, oefening.aantalSets, oefening.rusttijd, oefening.aantalHerhalingen, oefening.naam);
-            }
-        } else {
-            System.out.println("U komt niet in ons systeem voor");
-        }
-    }
 }
 
 public class Main {
     public static void main(String[] args) {
+        List<Trainingsschema> trainingsschemas = new ArrayList<>();
+
+        Trainingsschema arnoldSchema = new Trainingsschema("Arnold Schwarzenegger");
+        arnoldSchema.voegOefeningToe(new Oefening("Push-ups", "Armen", 3, 30, 3));
+        arnoldSchema.voegOefeningToe(new Oefening("Sit-ups", "Buik", 3, 30, 4));
+        arnoldSchema.voegOefeningToe(new Oefening("Squats", "Benen", 2, 30, 5));
+        arnoldSchema.voegOefeningToe(new Oefening("Supermans", "Rug", 3, 15, 3));
+        arnoldSchema.voegOefeningToe(new Oefening("Chest-dips", "Borst", 3, 30, 3));
+        trainingsschemas.add(arnoldSchema);
+
+        Trainingsschema kimSchema = new Trainingsschema("Kim Kardashian", "Daphne Jongejans");
+        kimSchema.voegOefeningToe(new Oefening("Supermans", "Rug", 3, 15, 3));
+        kimSchema.voegOefeningToe(new Oefening("Sit-ups", "Buik", 3, 30, 4));
+        trainingsschemas.add(kimSchema);
+
         System.out.println("Wat is uw naam? ");
         Scanner scanner = new Scanner(System.in);
         String naam = scanner.nextLine();
 
-        if ("Arnold Schwarzenegger".equalsIgnoreCase(naam)) {
-            Oefening pushUps = new Oefening("Push-ups", "Armen", 3, 30, 3);
-            Oefening sitUps = new Oefening("Sit-ups", "Buik", 3, 30, 4);
-            Oefening squats = new Oefening("Squats", "Benen", 2, 30, 5);
-            Oefening supermans = new Oefening("Supermans", "Rug", 3, 15, 3);
-            Oefening chestDips = new Oefening("Chest-dips", "Borst", 3, 30, 3);
+        Trainingsschema gebruikersSchema = null;
 
-            pushUps.toonGegevens();
-            sitUps.toonGegevens();
-            squats.toonGegevens();
-            supermans.toonGegevens();
-            chestDips.toonGegevens();
-        } else if ("Kim Kardashian".equalsIgnoreCase(naam)) {
-            System.out.println("Uw trainer: Daphne Jongejans");
-            Oefening supermans = new Oefening("Supermans", "Rug", 3, 15, 3);
-            Oefening sitUps = new Oefening("Sit-ups", "Buik", 3, 30, 4);
+        for (Trainingsschema schema : trainingsschemas) {
+            if (schema.isSchemaVoor(naam)) {
+                gebruikersSchema = schema;
+            }
+        }
 
-            supermans.toonGegevens();
-            sitUps.toonGegevens();
+        if (gebruikersSchema != null) {
+            gebruikersSchema.toonGegevens();
         } else {
             System.out.println("U komt niet voor in ons systeem.");
         }
