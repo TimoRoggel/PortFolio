@@ -22,7 +22,7 @@ class Oefening {
                 spiergroep, aantalSets, rusttijd, aantalHerhalingen, naam);
     }
 
-    public boolean isOefening(String naam){
+    public boolean isOefening(String naam) {
         return this.naam.equals(naam);
     }
 }
@@ -32,7 +32,7 @@ class Trainingsschema {
     String trainer;
     List<Oefening> oefeningen;
 
-    public Trainingsschema(String klantNaam){
+    public Trainingsschema(String klantNaam) {
         this.klantNaam = klantNaam;
         this.oefeningen = new ArrayList<>();
     }
@@ -47,7 +47,7 @@ class Trainingsschema {
         oefeningen.add(oefening);
     }
 
-    public boolean isSchemaVoor(String klant){
+    public boolean isSchemaVoor(String klant) {
         return klantNaam.equalsIgnoreCase(klant);
     }
 
@@ -59,24 +59,30 @@ class Trainingsschema {
             oefening.toonGegevens();
         }
     }
-
 }
 
 public class Main {
+    static List<Oefening> beschikbareOefeningen = new ArrayList<>();
+    static List<Trainingsschema> trainingsschemas = new ArrayList<>();
+
     public static void main(String[] args) {
-        List<Trainingsschema> trainingsschemas = new ArrayList<>();
+        beschikbareOefeningen.add(new Oefening("Push-ups", "Armen", 3, 30, 3));
+        beschikbareOefeningen.add(new Oefening("Sit-ups", "Buik", 3, 30, 4));
+        beschikbareOefeningen.add(new Oefening("Squats", "Benen", 2, 30, 5));
+        beschikbareOefeningen.add(new Oefening("Supermans", "Rug", 3, 15, 3));
+        beschikbareOefeningen.add(new Oefening("Chest-dips", "Borst", 3, 30, 3));
 
         Trainingsschema arnoldSchema = new Trainingsschema("Arnold Schwarzenegger");
-        arnoldSchema.voegOefeningToe(new Oefening("Push-ups", "Armen", 3, 30, 3));
-        arnoldSchema.voegOefeningToe(new Oefening("Sit-ups", "Buik", 3, 30, 4));
-        arnoldSchema.voegOefeningToe(new Oefening("Squats", "Benen", 2, 30, 5));
-        arnoldSchema.voegOefeningToe(new Oefening("Supermans", "Rug", 3, 15, 3));
-        arnoldSchema.voegOefeningToe(new Oefening("Chest-dips", "Borst", 3, 30, 3));
+        arnoldSchema.voegOefeningToe(vindOefening("Push-ups"));
+        arnoldSchema.voegOefeningToe(vindOefening("Sit-ups"));
+        arnoldSchema.voegOefeningToe(vindOefening("Squats"));
+        arnoldSchema.voegOefeningToe(vindOefening("Supermans"));
+        arnoldSchema.voegOefeningToe(vindOefening("Chest-dips"));
         trainingsschemas.add(arnoldSchema);
 
         Trainingsschema kimSchema = new Trainingsschema("Kim Kardashian", "Daphne Jongejans");
-        kimSchema.voegOefeningToe(new Oefening("Supermans", "Rug", 3, 15, 3));
-        kimSchema.voegOefeningToe(new Oefening("Sit-ups", "Buik", 3, 30, 4));
+        kimSchema.voegOefeningToe(vindOefening("Supermans"));
+        kimSchema.voegOefeningToe(vindOefening("Sit-ups"));
         trainingsschemas.add(kimSchema);
 
         System.out.println("Wat is uw naam? ");
@@ -84,10 +90,10 @@ public class Main {
         String naam = scanner.nextLine();
 
         Trainingsschema gebruikersSchema = null;
-
         for (Trainingsschema schema : trainingsschemas) {
             if (schema.isSchemaVoor(naam)) {
                 gebruikersSchema = schema;
+                break;
             }
         }
 
@@ -96,5 +102,14 @@ public class Main {
         } else {
             System.out.println("U komt niet voor in ons systeem.");
         }
+    }
+
+    public static Oefening vindOefening(String naam) {
+        for (Oefening oefening : beschikbareOefeningen) {
+            if (oefening.isOefening(naam)) {
+                return oefening;
+            }
+        }
+        return null;
     }
 }
