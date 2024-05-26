@@ -4,16 +4,30 @@ import java.util.Scanner;
 
 public class User {
     private final Scanner scanner = new Scanner(System.in);
+    UserFactory userFactory;
 
     public void run() {
-        System.out.print("Voer de admin code in: ");
-        String code = scanner.nextLine();
+        System.out.println("1. Admin");
+        System.out.println("2. Gebruiker");
+        System.out.println();
 
-        UserFactory userFactory;
-        if ("admin".equals(code)) {
-            userFactory = new AdminFactory();
-        } else {
-            userFactory = new GebruikerFactory();
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        switch (choice) {
+            case 1:
+                System.out.print("Voer de admin code in: ");
+                String code = scanner.nextLine();
+                if ("admin".equals(code)) {
+                    userFactory = new AdminFactory();
+                }
+                break;
+            case 2:
+                userFactory = new GebruikerFactory();
+                break;
+            default:
+                System.out.println("Verkeerde keuze.");
+
         }
 
         AppMenu appMenu = userFactory.createAppMenu();
